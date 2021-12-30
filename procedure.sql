@@ -1,9 +1,12 @@
-
-CREATE
-OR REPLACE PROCEDURE create_get_athletes_by_sport(suffix varchar)
-LANGUAGE 'plpgsql'
-AS $$
+CREATE OR REPLACE FUNCTION get_athletes_by_sport(sport VARCHAR(50)) RETURNS TABLE(ath_name varchar)
+    LANGUAGE plpgsql
+AS
+$$
 BEGIN
-EXECUTE 'CREATE TABLE sports' || quote_ident(suffix) || ' as (select * from  disipline d inner join athletes a ON a.discipline_id = d.dist_id);';
+    RETURN QUERY (SELECT a.ath_name
+                  FROM
+                      disipline d
+                          inner join athletes a ON a.discipline_id = d.dist_id
+                  WHERE  dist_name = sport);
 END;
 $$;
